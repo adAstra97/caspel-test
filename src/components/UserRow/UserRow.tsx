@@ -1,5 +1,7 @@
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
+import { Button } from '../Button/Button';
+
 interface Props {
   name: string;
   date: string;
@@ -14,18 +16,17 @@ export const UserRow = ({ date, name, value }: Props) => {
       <td className="px-3 py-2 text-size-16 color-text">{value}</td>
       <td className="px-3 py-2">
         <div className="flex gap-2 justify-around">
-          <button
-            className="cursor-pointer text-button hover:scale-110 hover:transition-transform duration-200"
+          <Button
             onClick={() => console.log('edit')}
-          >
-            <FiEdit size={20} />
-          </button>
-          <button
-            className="cursor-pointer text-remove hover:scale-110 hover:transition-transform duration-200"
+            icon={<FiEdit size={20} />}
+            className="text-button min-w-0 px-2 border-0 hover:scale-110"
+          />
+
+          <Button
             onClick={() => console.log('delete')}
-          >
-            <FiTrash2 size={20} />
-          </button>
+            icon={<FiTrash2 size={20} />}
+            className="text-remove min-w-0 px-2 border-0 hover:scale-110"
+          />
         </div>
       </td>
     </tr>
