@@ -1,70 +1,79 @@
+@import './fonts.css';
 @import 'tailwindcss';
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+@theme {
+  /* fonts */
+  --font-nunito: 'Nunito Sans', sans-serif;
+
+  /* main colors */
+  --color-background: #1a1a1a;
+  --color-text: #fcfbfc;
+  --color-text-hover: #ffffff;
+  --color-secondary-text: #bbbec4;
+  --color-button: #e6fc58;
+  --color-button-hover: #c0cd6b;
+  --color-border: #9a9da4;
+
+  /* additional colors */
+  --color-remove: #e25c5c;
+  --color-muted: #8c8e8f;
+
+  /* breakpoints */
+  --breakpoint-ls: 320px;
+  --breakpoint-es: 380px;
+  --breakpoint-xs: 475px;
+  --breakpoint-mds: 600px;
+  --breakpoint-sm: 768px;
+  --breakpoint-xl: 1024px;
+  --breakpoint-md: 1100px;
+  --breakpoint-lg: 1300px;
+  --breakpoint-2xl: 1440px;
+  --breakpoint-xh: 1600px;
+  --breakpoint-3xl: 1920px;
+
+  /* font size */
+  --text-size-14: 14px;
+  --text-size-16: 16px;
+  --text-size-18: 18px;
+  --text-size-20: 20px;
+  --text-size-24: 24px;
+  --text-size-32: 32px;
+  --text-size-40: 40px;
+  --text-size-48: 48px;
+  --text-size-64: 64px;
+}
+
+html,
+body {
+  font-family: var(--font-nunito);
   line-height: 1.5;
-  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--color-text);
+  background: var(--color-background);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+html {
+  scroll-behavior: smooth;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
