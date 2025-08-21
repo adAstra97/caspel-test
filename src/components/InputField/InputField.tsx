@@ -34,7 +34,9 @@ export const InputField = ({
           onClick={() => inputRef.current?.showPicker()}
         />
       )}
-      {error && <p className="text-size-14 text-remove">{error}</p>}
+      <span className="min-h-[21px]">
+        {error && <p className="text-size-14 text-remove">{error}</p>}
+      </span>
     </div>
   );
 };

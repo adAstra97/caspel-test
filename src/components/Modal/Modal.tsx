@@ -29,13 +29,14 @@ export const Modal = ({
         className="bg-background rounded-2xl max-w-[500px] w-full transform transition-all duration-300 scale-100 py-6 px-4 xs:px-10 border-2 border-border"
       >
         <h2 className="text-size-24 text-center">Modal Window</h2>
-        <div className="space-y-4 mb-8">
+        <div className="space-y-2 mb-8">
           <InputField
             type="text"
             placeholder="Enter name"
             error={errors.name}
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            maxLength={50}
           />
           <InputField
             type="date"

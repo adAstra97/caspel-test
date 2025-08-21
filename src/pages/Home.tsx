@@ -7,6 +7,7 @@ import { Modal } from '../components/Modal/Modal';
 import { UserRow } from '../components/UserRow/UserRow';
 import { useFormValidation } from '../hooks/useFormValidation';
 import { MOCKED_DATA } from '../shared/constants';
+import type { RowData } from '../shared/types';
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,9 +18,18 @@ const Home = () => {
   });
 
   const handleSubmit = () => {
-    if (validate()) {
-      console.log('Valid form:', formData);
-    }
+    if (!validate()) return;
+
+    const rowData: RowData = {
+      id: Date.now().toString(),
+      name: formData.name,
+      date: formData.date,
+      value: formData.value ?? 0,
+    };
+
+    MOCKED_DATA.unshift(rowData);
+    setFormData({ name: '', date: '', value: null });
+    setIsModalOpen(false);
   };
 
   return (
