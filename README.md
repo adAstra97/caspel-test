@@ -1,69 +1,48 @@
-# React + TypeScript + Vite
+# Data Table Component 📊✨
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React table component with full CRUD functionality, built with functional components and hooks. Features beautiful animations, responsive design, and comprehensive data management capabilities.
 
-Currently, two official plugins are available:
+🎯 Demo
+[Live Demo on GitHub Pages](https://adAstra97.github.io/caspel-test)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+✨ **Features:**
 
-## Expanding the ESLint configuration
+## Core Functionality
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Full CRUD Operations: Create, Read, Update, Delete records
+- Modal Windows: Smooth animated modals for adding/editing records
+- Form Validation: Real-time validation with error messages
+- Data Persistence: All changes stored in component state during session
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Advanced Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Smart Sorting: Click column headers to sort by name (alphabetical), date (chronological), or value (numerical)
+- Global Search: Search across all table fields with instant filtering
+- Responsive Design: Fully adaptive layout for mobile and desktop
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+## Table Columns
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Name (text) - sortable alphabetically
+- Date (date) - sortable chronologically with Russian locale formatting
+- Value (number) - sortable numerically with proper decimal formatting
+- Actions - Edit and Delete buttons with icons
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+🛠️ **Tech stack:**
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+- React 19 (functional components + hooks)
+- TypeScript
+- React Icons
+- Tailwind CSS v4
+- Vite
+- ESLint + Prettier + Husky
+- clsx
+
+⚙️ **Scripts:**
+
+- `npm run dev` — start dev server
+- `npm run build` — build app
+- `npm run lint` — run ESLint
+- `npm run lint:fix` — fix lint issues
+- `npm run preview` — preview build
+- `npm run format:fix` — run Prettier formatter
+- `npm run prepare` — install husky
