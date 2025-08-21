@@ -5,10 +5,22 @@ import { ControlPanel } from '../components/ControlPanel/ControlPanel';
 import { HeaderCell } from '../components/HeaderCell/HeaderCell';
 import { Modal } from '../components/Modal/Modal';
 import { UserRow } from '../components/UserRow/UserRow';
+import { useFormValidation } from '../hooks/useFormValidation';
 import { MOCKED_DATA } from '../shared/constants';
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { formData, setFormData, errors, validate } = useFormValidation({
+    name: '',
+    date: '',
+    value: null,
+  });
+
+  const handleSubmit = () => {
+    if (validate()) {
+      console.log('Valid form:', formData);
+    }
+  };
 
   return (
     <Container>
@@ -45,7 +57,15 @@ const Home = () => {
           </table>
         </div>
       </div>
-      {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <Modal
+          onClose={() => setIsModalOpen(false)}
+          errors={errors}
+          onSubmit={handleSubmit}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )}
     </Container>
   );
 };

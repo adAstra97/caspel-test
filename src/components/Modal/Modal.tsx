@@ -1,13 +1,24 @@
 import { FiPlus } from 'react-icons/fi';
 
+import type { Errors, FormData } from '../../shared/types';
 import { Button } from '../Button/Button';
 import { InputField } from '../InputField/InputField';
 
 interface Props {
+  errors: Errors;
+  formData: FormData;
   onClose: () => void;
+  onSubmit: () => void;
+  setFormData: (data: FormData) => void;
 }
 
-export const Modal = ({ onClose }: Props) => {
+export const Modal = ({
+  errors,
+  formData,
+  onClose,
+  onSubmit,
+  setFormData,
+}: Props) => {
   return (
     <div
       onClick={onClose}
@@ -18,13 +29,32 @@ export const Modal = ({ onClose }: Props) => {
         className="bg-background rounded-2xl max-w-[500px] w-full transform transition-all duration-300 scale-100 py-6 px-4 xs:px-10 border-2 border-border"
       >
         <h2 className="text-size-24 text-center">Modal Window</h2>
-        <div className="space-y-4">
-          <InputField type="text" placeholder="Enter name" error="Error Name" />
-          <InputField type="date" placeholder="Enter date" error="Error Date" />
+        <div className="space-y-4 mb-8">
+          <InputField
+            type="text"
+            placeholder="Enter name"
+            error={errors.name}
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+          <InputField
+            type="date"
+            placeholder="Enter date"
+            error={errors.date}
+            value={formData.date}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          />
           <InputField
             type="number"
             placeholder="Enter value"
-            error="Error Value"
+            error={errors.value}
+            value={formData.value ?? ''}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                value: e.target.value === '' ? null : Number(e.target.value),
+              })
+            }
           />
         </div>
         <div className="flex items-center justify-center gap-3">
@@ -33,11 +63,7 @@ export const Modal = ({ onClose }: Props) => {
             onClick={onClose}
             className="border-secondary-text text-secondary-text"
           />
-          <Button
-            icon={<FiPlus size={20} />}
-            title="Add"
-            onClick={() => console.log('Add')}
-          />
+          <Button icon={<FiPlus size={20} />} title="Add" onClick={onSubmit} />
         </div>
       </div>
     </div>

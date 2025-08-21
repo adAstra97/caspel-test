@@ -7,7 +7,13 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-export const InputField = ({ className, placeholder, type, error }: Props) => {
+export const InputField = ({
+  className,
+  placeholder,
+  type,
+  error,
+  ...rest
+}: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -16,6 +22,7 @@ export const InputField = ({ className, placeholder, type, error }: Props) => {
         ref={inputRef}
         type={type}
         placeholder={placeholder}
+        {...rest}
         className={cn(
           'border-b-2 border-text focus:border-button outline-0 flex items-center gap-2 text-white px-4 py-2 min-w-[250px]',
           className
