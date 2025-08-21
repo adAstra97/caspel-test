@@ -1,4 +1,4 @@
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiSave } from 'react-icons/fi';
 
 import type { Errors, FormData } from '../../shared/types';
 import { Button } from '../Button/Button';
@@ -10,6 +10,7 @@ interface Props {
   onClose: () => void;
   onSubmit: () => void;
   setFormData: (data: FormData) => void;
+  isEditing?: boolean;
 }
 
 export const Modal = ({
@@ -18,6 +19,7 @@ export const Modal = ({
   onClose,
   onSubmit,
   setFormData,
+  isEditing,
 }: Props) => {
   return (
     <div
@@ -28,7 +30,9 @@ export const Modal = ({
         onClick={(e) => e.stopPropagation()}
         className="bg-background rounded-2xl max-w-[500px] w-full transform transition-all duration-300 scale-100 py-6 px-4 xs:px-10 border-2 border-border"
       >
-        <h2 className="text-size-24 text-center">Modal Window</h2>
+        <h2 className="text-size-24 text-center">
+          {isEditing ? 'Edit user' : 'Add user'}
+        </h2>
         <div className="space-y-2 mb-8">
           <InputField
             type="text"
@@ -64,7 +68,11 @@ export const Modal = ({
             onClick={onClose}
             className="border-secondary-text text-secondary-text"
           />
-          <Button icon={<FiPlus size={20} />} title="Add" onClick={onSubmit} />
+          <Button
+            icon={isEditing ? <FiSave size={20} /> : <FiPlus size={20} />}
+            title={isEditing ? 'Save' : 'Add'}
+            onClick={onSubmit}
+          />
         </div>
       </div>
     </div>

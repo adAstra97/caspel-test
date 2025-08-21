@@ -4,24 +4,62 @@ import { Container } from '../components/Container/Container';
 import { ControlPanel } from '../components/ControlPanel/ControlPanel';
 import { HeaderCell } from '../components/HeaderCell/HeaderCell';
 import { Modal } from '../components/Modal/Modal';
+import { NoData } from '../components/NoData/NoData';
 import { UserRow } from '../components/UserRow/UserRow';
 import { useDebounce } from '../hooks/useDebounce';
 import { useFormValidation } from '../hooks/useFormValidation';
 import { MOCKED_DATA } from '../shared/constants';
 import type { RowData } from '../shared/types';
 
+type SortKey = keyof Omit<RowData, 'id'>;
+
+interface SortConfig {
+  key: SortKey;
+  ascending: boolean;
+}
+
 const Home = () => {
   const [users, setUsers] = useState<RowData[]>(MOCKED_DATA);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<RowData | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+
   const debouncedSearch = useDebounce(searchQuery, 300);
+
   const { formData, setFormData, errors, validate, setErrors } =
     useFormValidation({
       name: '',
       date: '',
       value: null,
     });
+
+  const sortedUsers = useMemo(() => {
+    if (!sortConfig) return users;
+
+    const { key, ascending } = sortConfig;
+
+    return [...users].sort((a, b) => {
+      let comparison = 0;
+
+      if (key === 'value') comparison = a.value - b.value;
+      if (key === 'name') comparison = a.name.localeCompare(b.name);
+      if (key === 'date')
+        comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+
+      return ascending ? comparison : -comparison;
+    });
+  }, [users, sortConfig]);
+
+  const filteredUsers = useMemo(() => {
+    if (!debouncedSearch) return sortedUsers;
+
+    return sortedUsers.filter((item) =>
+      Object.values(item).some((value) =>
+        String(value).toLowerCase().includes(debouncedSearch.toLowerCase())
+      )
+    );
+  }, [sortedUsers, debouncedSearch]);
 
   const handleSubmit = () => {
     if (!validate()) return;
@@ -69,15 +107,12 @@ const Home = () => {
     setUsers((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const filteredUsers = useMemo(() => {
-    if (!debouncedSearch) return users;
-
-    return users.filter((item) =>
-      Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(debouncedSearch.toLowerCase())
-      )
-    );
-  }, [users, debouncedSearch]);
+  const sortBy = (key: SortKey) => {
+    setSortConfig((prev) => {
+      const ascending = prev?.key === key ? !prev.ascending : true;
+      return { key, ascending };
+    });
+  };
 
   return (
     <Container>
@@ -96,18 +131,15 @@ const Home = () => {
               </caption>
               <thead className="select-none border-b-2 border-border/5 bg-border/10">
                 <tr>
-                  <HeaderCell
-                    title="Name"
-                    onClick={() => console.log('sort by name')}
-                  />
-                  <HeaderCell
-                    title="Date"
-                    onClick={() => console.log('sort by date')}
-                  />
-                  <HeaderCell
-                    title="Value"
-                    onClick={() => console.log('sort by value')}
-                  />
+                  {['name', 'date', 'value'].map((item) => (
+                    <HeaderCell
+                      key={item}
+                      title={item[0].toUpperCase() + item.slice(1)}
+                      onClick={() => sortBy(item as SortKey)}
+                      isSorted={sortConfig?.key === item}
+                      ascending={sortConfig?.ascending ?? true}
+                    />
+                  ))}
                   <th className="px-3 py-2 text-size-18">Actions</th>
                 </tr>
               </thead>
@@ -124,11 +156,7 @@ const Home = () => {
             </table>
           </div>
         )}
-        {!filteredUsers.length && (
-          <div className="text-size-24 text-center min-h-[138px] flex items-center justify-center">
-            No data found 😢
-          </div>
-        )}
+        {!filteredUsers.length && <NoData />}
       </div>
       {isModalOpen && (
         <Modal
@@ -137,6 +165,7 @@ const Home = () => {
           onSubmit={handleSubmit}
           formData={formData}
           setFormData={setFormData}
+          isEditing={!!editingUser}
         />
       )}
     </Container>

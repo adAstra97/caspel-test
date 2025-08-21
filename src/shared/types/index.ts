@@ -1,3 +1,5 @@
+export type SortKey = keyof Omit<RowData, 'id'>;
+
 export interface RowData {
   id: string;
   name: string;
