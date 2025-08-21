@@ -81,3 +81,14 @@ input[type='date']::-webkit-calendar-picker-indicator {
     scroll-behavior: auto;
   }
 }
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

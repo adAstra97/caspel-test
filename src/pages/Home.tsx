@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { Container } from '../components/Container/Container';
 import { ControlPanel } from '../components/ControlPanel/ControlPanel';
@@ -6,26 +6,24 @@ import { HeaderCell } from '../components/HeaderCell/HeaderCell';
 import { Modal } from '../components/Modal/Modal';
 import { NoData } from '../components/NoData/NoData';
 import { UserRow } from '../components/UserRow/UserRow';
-import { useDebounce } from '../hooks/useDebounce';
 import { useFormValidation } from '../hooks/useFormValidation';
-import { MOCKED_DATA } from '../shared/constants';
-import type { RowData } from '../shared/types';
-
-type SortKey = keyof Omit<RowData, 'id'>;
-
-interface SortConfig {
-  key: SortKey;
-  ascending: boolean;
-}
+import { useUsers } from '../hooks/useUsers';
+import type { RowData, SortKey } from '../shared/types';
 
 const Home = () => {
-  const [users, setUsers] = useState<RowData[]>(MOCKED_DATA);
+  const {
+    users,
+    searchQuery,
+    setSearchQuery,
+    addUser,
+    updateUser,
+    removeUser,
+    sortBy,
+    sortConfig,
+  } = useUsers();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<RowData | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
-
-  const debouncedSearch = useDebounce(searchQuery, 300);
 
   const { formData, setFormData, errors, validate, setErrors } =
     useFormValidation({
@@ -34,50 +32,19 @@ const Home = () => {
       value: null,
     });
 
-  const sortedUsers = useMemo(() => {
-    if (!sortConfig) return users;
-
-    const { key, ascending } = sortConfig;
-
-    return [...users].sort((a, b) => {
-      let comparison = 0;
-
-      if (key === 'value') comparison = a.value - b.value;
-      if (key === 'name') comparison = a.name.localeCompare(b.name);
-      if (key === 'date')
-        comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
-
-      return ascending ? comparison : -comparison;
-    });
-  }, [users, sortConfig]);
-
-  const filteredUsers = useMemo(() => {
-    if (!debouncedSearch) return sortedUsers;
-
-    return sortedUsers.filter((item) =>
-      Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(debouncedSearch.toLowerCase())
-      )
-    );
-  }, [sortedUsers, debouncedSearch]);
-
   const handleSubmit = () => {
     if (!validate()) return;
 
-    const rowData: Omit<RowData, 'id'> = {
+    const rowData = {
       name: formData.name,
       date: formData.date,
       value: formData.value ?? 0,
     };
 
     if (editingUser) {
-      setUsers((prev) =>
-        prev.map((item) =>
-          item.id === editingUser.id ? { ...item, ...rowData } : item
-        )
-      );
+      updateUser(editingUser.id, rowData);
     } else {
-      setUsers((prev) => [{ ...rowData, id: Date.now().toString() }, ...prev]);
+      addUser(rowData);
     }
 
     setFormData({ name: '', date: '', value: null });
@@ -92,26 +59,11 @@ const Home = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (userData: RowData) => {
-    setEditingUser(userData);
-    setFormData({
-      name: userData.name,
-      date: userData.date,
-      value: userData.value,
-    });
+  const handleEdit = (user: RowData) => {
+    setEditingUser(user);
+    setFormData({ name: user.name, date: user.date, value: user.value });
     setErrors({ name: '', date: '', value: '' });
     setIsModalOpen(true);
-  };
-
-  const handleRemove = (id: string) => {
-    setUsers((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const sortBy = (key: SortKey) => {
-    setSortConfig((prev) => {
-      const ascending = prev?.key === key ? !prev.ascending : true;
-      return { key, ascending };
-    });
   };
 
   return (
@@ -123,7 +75,7 @@ const Home = () => {
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
-        {!!filteredUsers.length && (
+        {!!users.length && (
           <div className="overflow-x-auto">
             <table className="w-full">
               <caption className="mb-3 text-size-20 text-left">
@@ -140,23 +92,23 @@ const Home = () => {
                       ascending={sortConfig?.ascending ?? true}
                     />
                   ))}
-                  <th className="px-3 py-2 text-size-18">Actions</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((item) => (
+                {users.map((user) => (
                   <UserRow
-                    key={item.id}
-                    {...item}
-                    onRemove={handleRemove}
+                    key={user.id}
+                    {...user}
                     onEdit={handleEdit}
+                    onRemove={removeUser}
                   />
                 ))}
               </tbody>
             </table>
           </div>
         )}
-        {!filteredUsers.length && <NoData />}
+        {!users.length && <NoData />}
       </div>
       {isModalOpen && (
         <Modal

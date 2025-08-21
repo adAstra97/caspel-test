@@ -29,6 +29,7 @@ export const Modal = ({
       <div
         onClick={(e) => e.stopPropagation()}
         className="bg-background rounded-2xl max-w-[500px] w-full transform transition-all duration-300 scale-100 py-6 px-4 xs:px-10 border-2 border-border"
+        style={{ animation: 'modalSlideIn 0.3s ease-out' }}
       >
         <h2 className="text-size-24 text-center">
           {isEditing ? 'Edit user' : 'Add user'}
