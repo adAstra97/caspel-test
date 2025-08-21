@@ -12,25 +12,54 @@ import type { RowData } from '../shared/types';
 const Home = () => {
   const [users, setUsers] = useState<RowData[]>(MOCKED_DATA);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { formData, setFormData, errors, validate } = useFormValidation({
-    name: '',
-    date: '',
-    value: null,
-  });
+  const [editingUser, setEditingUser] = useState<RowData | null>(null);
+  const { formData, setFormData, errors, validate, setErrors } =
+    useFormValidation({
+      name: '',
+      date: '',
+      value: null,
+    });
 
   const handleSubmit = () => {
     if (!validate()) return;
 
-    const rowData: RowData = {
-      id: Date.now().toString(),
+    const rowData: Omit<RowData, 'id'> = {
       name: formData.name,
       date: formData.date,
       value: formData.value ?? 0,
     };
 
-    setUsers((prev) => [...prev, rowData]);
+    if (editingUser) {
+      setUsers((prev) =>
+        prev.map((item) =>
+          item.id === editingUser.id ? { ...item, ...rowData } : item
+        )
+      );
+    } else {
+      setUsers((prev) => [{ ...rowData, id: Date.now().toString() }, ...prev]);
+    }
+
     setFormData({ name: '', date: '', value: null });
+    setErrors({ name: '', date: '', value: '' });
     setIsModalOpen(false);
+  };
+
+  const handleAdd = () => {
+    setEditingUser(null);
+    setFormData({ name: '', date: '', value: null });
+    setErrors({ name: '', date: '', value: '' });
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (userData: RowData) => {
+    setEditingUser(userData);
+    setFormData({
+      name: userData.name,
+      date: userData.date,
+      value: userData.value,
+    });
+    setErrors({ name: '', date: '', value: '' });
+    setIsModalOpen(true);
   };
 
   const handleRemove = (id: string) => {
@@ -41,7 +70,7 @@ const Home = () => {
     <Container>
       <h1 className="text-size-32 mb-3 text-center font-light">Manage Data</h1>
       <div className="py-3 px-4 border-2 rounded-2xl border-border shadow-sm shadow-border">
-        <ControlPanel onClick={() => setIsModalOpen(true)} />
+        <ControlPanel onClick={handleAdd} />
         {!!users.length && (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -67,7 +96,12 @@ const Home = () => {
               </thead>
               <tbody>
                 {users.map((item) => (
-                  <UserRow key={item.id} {...item} onRemove={handleRemove} />
+                  <UserRow
+                    key={item.id}
+                    {...item}
+                    onRemove={handleRemove}
+                    onEdit={handleEdit}
+                  />
                 ))}
               </tbody>
             </table>

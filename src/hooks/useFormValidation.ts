@@ -29,5 +29,5 @@ export const useFormValidation = (initialData: FormData) => {
     return Object.values(newErrors).every((e) => !e);
   };
 
-  return { formData, setFormData, errors, validate };
+  return { formData, setFormData, errors, validate, setErrors };
 };
