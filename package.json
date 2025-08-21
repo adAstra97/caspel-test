@@ -13,7 +13,7 @@
     "format:fix": "prettier -l --write .",
     "prepare": "husky && chmod ug+x .husky/*",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.12",
