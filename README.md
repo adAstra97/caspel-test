@@ -5,29 +5,29 @@ A modern React table component with full CRUD functionality, built with function
 🎯 Demo
 [Live Demo on GitHub Pages](https://adAstra97.github.io/caspel-test)
 
-✨ **Features:**
+## ✨ **Features:**
 
-## Core Functionality
+### Core Functionality
 
 - Full CRUD Operations: Create, Read, Update, Delete records
 - Modal Windows: Smooth animated modals for adding/editing records
 - Form Validation: Real-time validation with error messages
 - Data Persistence: All changes stored in component state during session
 
-## Advanced Features
+### Advanced Features
 
 - Smart Sorting: Click column headers to sort by name (alphabetical), date (chronological), or value (numerical)
 - Global Search: Search across all table fields with instant filtering
 - Responsive Design: Fully adaptive layout for mobile and desktop
 
-## Table Columns
+### Table Columns
 
 - Name (text) - sortable alphabetically
 - Date (date) - sortable chronologically with Russian locale formatting
 - Value (number) - sortable numerically with proper decimal formatting
 - Actions - Edit and Delete buttons with icons
 
-🛠️ **Tech stack:**
+## 🛠️ **Tech stack:**
 
 - React 19 (functional components + hooks)
 - TypeScript
@@ -37,7 +37,7 @@ A modern React table component with full CRUD functionality, built with function
 - ESLint + Prettier + Husky
 - clsx
 
-⚙️ **Scripts:**
+## ⚙️ **Scripts:**
 
 - `npm run dev` — start dev server
 - `npm run build` — build app
